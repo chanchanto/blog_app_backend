@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
-  resources :bookmarks
-  resources :tags
-  devise_for :users
+  devise_for :users,
+    defaults: { format: :json },
+    controllers: {
+      sessions: 'users/sessions',
+      registrations: 'users/registrations'
+    }
+  get '/current_user', to: 'current_user#show'
   resources :posts do
     resources :comments
   end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :bookmarks
+  resources :tags
 end
