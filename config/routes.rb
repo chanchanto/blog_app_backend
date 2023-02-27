@@ -9,6 +9,6 @@ Rails.application.routes.draw do
   resources :posts do
     resources :comments
   end
-  resources :bookmarks
+  resources :bookmarks, only: [ :index, :create, :destroy ]
   resources :tags
 end

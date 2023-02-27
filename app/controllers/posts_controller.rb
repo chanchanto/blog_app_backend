@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_post, only: %i[ show update destroy ]
+  before_action :check_owner, only: %i[ edit update destroy ]
 
   # GET /posts
   def index
@@ -15,7 +17,7 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    @post = current_user.posts.new(post_params)
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -41,7 +43,17 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = Post.find(params[:id])
+      @post = Post.find_by_id(params[:id])
+
+      render json: {
+        message: 'Post not found'
+      }, status: :not_found if @post.nil?
+    end
+
+    def check_owner
+      render json: {
+        message: 'Unauthorized action'
+      }, status: :unauthorized unless current_user.id == @post.user_id
     end
 
     # Only allow a list of trusted parameters through.
