@@ -1,5 +1,5 @@
-class CommentsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
+class Api::V1::CommentsController < ApplicationController
+  before_action :authenticate_api_v1_user!, except: [ :index, :show ]
   before_action :set_post
   before_action :set_comment, only: %i[ show update destroy ]
   before_action :check_owner, only: %i[ edit update destroy ]
@@ -18,11 +18,11 @@ class CommentsController < ApplicationController
 
   # POST /comments
   def create
-    @comment = current_user.comments.new(comment_params)
+    @comment = current_api_v1_user.comments.new(comment_params)
     @comment.post = @post
 
     if @comment.save
-      render json: @comment, status: :created, location: @comment.post
+      render json: @comment, status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -63,7 +63,7 @@ class CommentsController < ApplicationController
     def check_owner
       render json: {
         message: 'Unauthorized action'
-      }, status: :unauthorized unless current_user.id == @comment.user_id
+      }, status: :unauthorized unless current_api_v1_user.id == @comment.user_id
     end
 
     # Only allow a list of trusted parameters through.

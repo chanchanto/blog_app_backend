@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Users::SessionsController < Devise::SessionsController
+class Api::V1::Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   # before_action :configure_sign_in_params, only: [:create]
@@ -32,12 +32,12 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(_resource, _opts = {})
     render json: {
       message: 'You are logged in.',
-      user: current_user
+      user: current_api_v1_user
     }, status: :ok
   end
 
   def respond_to_on_destroy
-    current_user ? log_out_success : log_out_failure
+    current_api_v1_user ? log_out_success : log_out_failure
   end
 
   def log_out_success

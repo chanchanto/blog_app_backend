@@ -1,5 +1,5 @@
-class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
+class Api::V1::PostsController < ApplicationController
+  before_action :authenticate_api_v1_user!, except: [ :index, :show ]
   before_action :set_post, only: %i[ show update destroy ]
   before_action :check_owner, only: %i[ edit update destroy ]
 
@@ -17,10 +17,10 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = current_user.posts.new(post_params)
+    @post = current_api_v1_user.posts.new(post_params)
 
     if @post.save
-      render json: @post, status: :created, location: @post
+      render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -53,7 +53,7 @@ class PostsController < ApplicationController
     def check_owner
       render json: {
         message: 'Unauthorized action'
-      }, status: :unauthorized unless current_user.id == @post.user_id
+      }, status: :unauthorized unless current_api_v1_user.id == @post.user_id
     end
 
     # Only allow a list of trusted parameters through.

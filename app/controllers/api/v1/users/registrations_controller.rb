@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Users::RegistrationsController < Devise::RegistrationsController
+class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   # before_action :configure_sign_up_params, only: [:create]
@@ -71,7 +71,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def register_success
     render json: {
       message: 'Signed up sucessfully.',
-      user: current_user
+      user: current_api_v1_user
     }, status: :ok
   end
 

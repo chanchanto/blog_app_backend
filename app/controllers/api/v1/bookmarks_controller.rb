@@ -1,19 +1,19 @@
-class BookmarksController < ApplicationController
-  before_action :authenticate_user!, except: [ :index ]
+class Api::V1::BookmarksController < ApplicationController
+  before_action :authenticate_api_v1_user!, except: [ :index ]
   before_action :set_post, only: [ :create ]
   before_action :set_bookmark, only: [ :destroy ]
   before_action :check_owner, only: [ :destroy ]
 
   # GET /bookmarks
   def index
-    @bookmarks = current_user.bookmarks
+    @bookmarks = current_api_v1_user.bookmarks
 
     render json: @bookmarks
   end
 
   # POST /bookmarks
   def create
-    @bookmark = current_user.bookmarks.new(bookmark_params)
+    @bookmark = current_api_v1_user.bookmarks.new(bookmark_params)
     @bookmark.post = @post
 
     if @bookmark.save
@@ -49,7 +49,7 @@ class BookmarksController < ApplicationController
     def check_owner
       render json: {
         message: 'Unauthorized action'
-      }, status: :unauthorized unless current_user.id == @bookmark.user_id
+      }, status: :unauthorized unless current_api_v1_user.id == @bookmark.user_id
     end
 
     # Only allow a list of trusted parameters through.
