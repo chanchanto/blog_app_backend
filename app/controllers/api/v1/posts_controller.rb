@@ -14,7 +14,7 @@ class Api::V1::PostsController < ApplicationController
   def show
     render json: @post,
       serializer: Api::V1::PostShowSerializer,
-      include: ['comments', 'comments.user']
+      include: ['user', 'user.email', 'tags', 'comments', 'comments.user']
   end
 
   # POST /posts
