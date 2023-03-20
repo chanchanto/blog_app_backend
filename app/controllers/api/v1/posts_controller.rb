@@ -12,9 +12,7 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    render json: @post,
-      serializer: Api::V1::PostShowSerializer,
-      include: ['user', 'user.email', 'tags', 'comments', 'comments.user']
+    render json: @post
   end
 
   # POST /posts
