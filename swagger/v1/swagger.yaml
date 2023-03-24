@@ -1,0 +1,307 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/posts/{post_id}/comments":
+    get:
+      summary: list comments
+      tags:
+      - Comments
+      parameters:
+      - name: post_id
+        in: path
+        require: true
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+    post:
+      summary: create comment
+      tags:
+      - Comments
+      parameters: []
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: missing params
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+              required:
+              - body
+              example:
+                body: test
+  "/api/v1/posts/{post_id}/comments/{id}":
+    parameters:
+    - name: post_id
+      in: path
+      require: true
+      required: true
+      schema:
+        type: integer
+    - name: id
+      in: path
+      require: true
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: show comment
+      tags:
+      - Comments
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+    put:
+      summary: update comment
+      tags:
+      - Comments
+      parameters: []
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: missing param
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+              required:
+              - body
+              example:
+                body: test
+    delete:
+      summary: delete comment
+      tags:
+      - Comments
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+  "/api/v1/posts":
+    get:
+      summary: list posts
+      tags:
+      - Posts
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create post
+      tags:
+      - Posts
+      parameters: []
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              required:
+              - title
+              - content
+              example:
+                title: test
+                content: test
+  "/api/v1/posts/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: show post
+      tags:
+      - Posts
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+    put:
+      summary: update post
+      tags:
+      - Posts
+      parameters: []
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              required:
+              - title
+              - content
+              example:
+                title: test
+                content: test
+    delete:
+      summary: delete post
+      tags:
+      - Posts
+      security:
+      - Bearer: {}
+      responses:
+        '204':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+  "/api/v1/users":
+    post:
+      summary: sign up
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: missing param
+        '422':
+          description: invalid email or password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_v1_user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
+                  required:
+                  - email
+                  - password
+                  - password_confirmation
+              required:
+              - api_v1_user
+              example:
+                api_v1_user:
+                  email: example@test.com
+                  password: '12345678'
+                  password_confirmation: '12345678'
+  "/api/v1/users/sign_in":
+    post:
+      summary: login
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: missing param
+        '401':
+          description: unauthorized, wrong email or password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_v1_user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+              required:
+              - api_v1_user
+              example:
+                api_v1_user:
+                  email: example@test.com
+                  password: '12345678'
+  "/api/v1/users/sign_out":
+    delete:
+      summary: logout
+      tags:
+      - Auth
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized, missing token or token expired
+servers:
+- url: http://{localtHost}
+  variables:
+    localtHost:
+      default: 127.0.0.1:3000/
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
