@@ -295,9 +295,13 @@ paths:
         '401':
           description: unauthorized, missing token or token expired
 servers:
-- url: http://{localtHost}
+- url: https://{productionHost}
   variables:
-    localtHost:
+    productionHost:
+      default: backendapi.osc-fr1.scalingo.io/
+- url: http://{localHost}
+  variables:
+    localHost:
       default: 127.0.0.1:3000/
 components:
   securitySchemes:

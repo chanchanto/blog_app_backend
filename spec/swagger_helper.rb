@@ -24,9 +24,17 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'http://{localtHost}',
+          url: 'https://{productionHost}',
           variables: {
-            localtHost: {
+            productionHost: {
+              default: 'backendapi.osc-fr1.scalingo.io/'
+            }
+          }
+        },
+        {
+          url: 'http://{localHost}',
+          variables: {
+            localHost: {
               default: '127.0.0.1:3000/'
             }
           }
