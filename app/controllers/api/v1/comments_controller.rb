@@ -6,7 +6,7 @@ class Api::V1::CommentsController < ApplicationController
 
   # GET /comments
   def index
-    @comments = @post.comments
+    @comments = @post.comments.order(created_at: :desc)
 
     render json: @comments
   end
